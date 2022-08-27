@@ -1,26 +1,27 @@
 import LinkedList from '../LinkedList';
+import List from '../List';
 
 describe('LinkedList', () => {
   it('should create empty linked list', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
     expect(linkedList.toString()).toBe('');
   });
 
   it('should append node to linked list', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
 
-    expect(linkedList.head).toBeNull();
-    expect(linkedList.tail).toBeNull();
+    expect(linkedList.head).toBeUndefined();
+    expect(linkedList.tail).toBeUndefined();
 
     linkedList.append(1);
     linkedList.append(2);
 
     expect(linkedList.toString()).toBe('1,2');
-    expect(linkedList.tail.next).toBeNull();
+    expect(linkedList.tail.next).toBeUndefined();
   });
 
   it('should prepend node to linked list', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
 
     linkedList.prepend(2);
     expect(linkedList.head.toString()).toBe('2');
@@ -33,13 +34,14 @@ describe('LinkedList', () => {
   });
 
   it('should insert node to linked list', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
 
     linkedList.insert(4, 3);
     expect(linkedList.head.toString()).toBe('4');
     expect(linkedList.tail.toString()).toBe('4');
 
     linkedList.insert(3, 2);
+
     linkedList.insert(2, 1);
     linkedList.insert(1, -7);
     linkedList.insert(10, 9);
@@ -48,9 +50,9 @@ describe('LinkedList', () => {
   });
 
   it('should delete node by value from linked list', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
 
-    expect(linkedList.delete(5)).toBeNull();
+    expect(linkedList.delete(5)).toBeUndefined();
 
     linkedList.append(1);
     linkedList.append(1);
@@ -94,7 +96,7 @@ describe('LinkedList', () => {
   });
 
   it('should delete linked list tail', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
 
     linkedList.append(1);
     linkedList.append(2);
@@ -121,8 +123,8 @@ describe('LinkedList', () => {
 
     expect(deletedNode3.value).toBe(1);
     expect(linkedList.toString()).toBe('');
-    expect(linkedList.head).toBeNull();
-    expect(linkedList.tail).toBeNull();
+    expect(linkedList.head).toBeUndefined();
+    expect(linkedList.tail).toBeUndefined();
   });
 
   it('should delete linked list head', () => {
@@ -157,9 +159,7 @@ describe('LinkedList', () => {
     const nodeValue1 = { value: 1, key: 'key1' };
     const nodeValue2 = { value: 2, key: 'key2' };
 
-    linkedList
-      .append(nodeValue1)
-      .prepend(nodeValue2);
+    linkedList.append(nodeValue1).prepend(nodeValue2);
 
     const nodeStringifier = (value) => `${value.key}:${value.value}`;
 
@@ -174,9 +174,7 @@ describe('LinkedList', () => {
     linkedList.append(1);
     expect(linkedList.find({ value: 1 })).toBeDefined();
 
-    linkedList
-      .append(2)
-      .append(3);
+    linkedList.append(2).append(3);
 
     const node = linkedList.find({ value: 2 });
 
@@ -192,12 +190,16 @@ describe('LinkedList', () => {
       .append({ value: 2, key: 'test2' })
       .append({ value: 3, key: 'test3' });
 
-    const node = linkedList.find({ callback: (value) => value.key === 'test2' });
+    const node = linkedList.find({
+      callback: (value) => value.key === 'test2',
+    });
 
     expect(node).toBeDefined();
     expect(node.value.value).toBe(2);
     expect(node.value.key).toBe('test2');
-    expect(linkedList.find({ callback: (value) => value.key === 'test5' })).toBeNull();
+    expect(
+      linkedList.find({ callback: (value) => value.key === 'test5' }),
+    ).toBeNull();
   });
 
   it('should create linked list from array', () => {
@@ -230,7 +232,9 @@ describe('LinkedList', () => {
     expect(node).toBeDefined();
     expect(node.value.value).toBe(2);
     expect(node.value.customValue).toBe('test2');
-    expect(linkedList.find({ value: { value: 2, customValue: 'test5' } })).toBeNull();
+    expect(
+      linkedList.find({ value: { value: 2, customValue: 'test5' } }),
+    ).toBeNull();
   });
 
   it('should find preferring callback over compare function', () => {
@@ -258,10 +262,7 @@ describe('LinkedList', () => {
     const linkedList = new LinkedList();
 
     // Add test values to linked list.
-    linkedList
-      .append(1)
-      .append(2)
-      .append(3);
+    linkedList.append(1).append(2).append(3);
 
     expect(linkedList.toString()).toBe('1,2,3');
     expect(linkedList.head.value).toBe(1);
