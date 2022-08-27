@@ -1,4 +1,3 @@
-import LinkedList from '../LinkedList';
 import List from '../List';
 
 describe('LinkedList', () => {
@@ -128,9 +127,9 @@ describe('LinkedList', () => {
   });
 
   it('should delete linked list head', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
 
-    expect(linkedList.deleteHead()).toBeNull();
+    expect(linkedList.deleteHead()).toBeUndefined();
 
     linkedList.append(1);
     linkedList.append(2);
@@ -149,12 +148,12 @@ describe('LinkedList', () => {
 
     expect(deletedNode2.value).toBe(2);
     expect(linkedList.toString()).toBe('');
-    expect(linkedList.head).toBeNull();
-    expect(linkedList.tail).toBeNull();
+    expect(linkedList.head).toBeUndefined();
+    expect(linkedList.tail).toBeUndefined();
   });
 
   it('should be possible to store objects in the list and to print them out', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
 
     const nodeValue1 = { value: 1, key: 'key1' };
     const nodeValue2 = { value: 2, key: 'key2' };
@@ -167,9 +166,9 @@ describe('LinkedList', () => {
   });
 
   it('should find node by value', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
 
-    expect(linkedList.find({ value: 5 })).toBeNull();
+    expect(linkedList.find({ value: 5 })).toBeUndefined();
 
     linkedList.append(1);
     expect(linkedList.find({ value: 1 })).toBeDefined();
@@ -179,11 +178,11 @@ describe('LinkedList', () => {
     const node = linkedList.find({ value: 2 });
 
     expect(node.value).toBe(2);
-    expect(linkedList.find({ value: 5 })).toBeNull();
+    expect(linkedList.find({ value: 5 })).toBeUndefined();
   });
 
   it('should find node by callback', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
 
     linkedList
       .append({ value: 1, key: 'test1' })
@@ -198,12 +197,12 @@ describe('LinkedList', () => {
     expect(node.value.value).toBe(2);
     expect(node.value.key).toBe('test2');
     expect(
-      linkedList.find({ callback: (value) => value.key === 'test5' }),
-    ).toBeNull();
+      linkedList.find({ callback: (value) => value.key === 'test5' })
+    ).toBeUndefined();
   });
 
   it('should create linked list from array', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
     linkedList.fromArray([1, 1, 2, 3, 3, 3, 4, 5]);
 
     expect(linkedList.toString()).toBe('1,1,2,3,3,3,4,5');
@@ -218,7 +217,7 @@ describe('LinkedList', () => {
       return a.customValue < b.customValue ? -1 : 1;
     };
 
-    const linkedList = new LinkedList(comparatorFunction);
+    const linkedList = List.create(comparatorFunction);
 
     linkedList
       .append({ value: 1, customValue: 'test1' })
@@ -233,14 +232,14 @@ describe('LinkedList', () => {
     expect(node.value.value).toBe(2);
     expect(node.value.customValue).toBe('test2');
     expect(
-      linkedList.find({ value: { value: 2, customValue: 'test5' } }),
-    ).toBeNull();
+      linkedList.find({ value: { value: 2, customValue: 'test5' } })
+    ).toBeUndefined();
   });
 
   it('should find preferring callback over compare function', () => {
     const greaterThan = (value, compareTo) => (value > compareTo ? 0 : 1);
 
-    const linkedList = new LinkedList(greaterThan);
+    const linkedList = List.create(greaterThan);
     linkedList.fromArray([1, 2, 3, 4, 5]);
 
     let node = linkedList.find({ value: 3 });
@@ -251,7 +250,7 @@ describe('LinkedList', () => {
   });
 
   it('should convert to array', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
     linkedList.append(1);
     linkedList.append(2);
     linkedList.append(3);
@@ -259,7 +258,7 @@ describe('LinkedList', () => {
   });
 
   it('should reverse linked list', () => {
-    const linkedList = new LinkedList();
+    const linkedList = List.create();
 
     // Add test values to linked list.
     linkedList.append(1).append(2).append(3);

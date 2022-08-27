@@ -1,7 +1,16 @@
 import Node from './Node';
 
 const List = {
-  create() {
+  create(comparator) {
+    comparator = comparator
+      ? comparator
+      : (a, b) => {
+          if (a === b) {
+            return 0;
+          }
+          return 1;
+        };
+
     function deleteTail() {
       if (!this.head) {
         return undefined;
@@ -64,7 +73,7 @@ const List = {
       return deletedNode;
     }
 
-    function toString() {
+    function toString(callback) {
       if (!this.head) {
         return '';
       }
@@ -73,7 +82,7 @@ const List = {
       const arr = [];
 
       while (curr) {
-        arr.push(curr.value);
+        arr.push(curr);
 
         if (!curr.next) {
           this.tail = curr;
@@ -82,14 +91,14 @@ const List = {
         curr = curr.next;
       }
 
-      return arr.join(',');
+      return arr.map((i) => i.toString(callback)).join(',');
     }
 
     function append(value) {
       if (!this.head) {
         this.head = Node.create(value);
         this.tail = this.head;
-        return;
+        return this;
       }
 
       let curr = this.head;
@@ -99,6 +108,8 @@ const List = {
 
       curr.next = Node.create(value);
       this.tail = curr.next;
+
+      return this;
     }
 
     function prepend(value) {
@@ -127,6 +138,80 @@ const List = {
       curr.next = Node.create(value, next);
     }
 
+    function deleteHead() {
+      if (!this.head) {
+        return;
+      }
+
+      const deletedNode = this.head;
+
+      if (this.head === this.tail) {
+        this.tail = undefined;
+      }
+
+      this.head = this.head.next;
+
+      return deletedNode;
+    }
+
+    function find({ value, callback }) {
+      let curr = this.head;
+
+      let isEqual = (v) => comparator(v, value) === 0;
+      if (callback) {
+        isEqual = callback;
+      }
+
+      while (curr) {
+        if (isEqual(curr.value)) {
+          return curr;
+        }
+
+        curr = curr.next;
+      }
+    }
+
+    function fromArray(arr) {
+      this.head = undefined;
+      this.tail = undefined;
+      arr.forEach((el) => {
+        this.append(el);
+      });
+    }
+
+    function toArray() {
+      let curr = this.head;
+
+      const arr = [];
+      while (curr) {
+        arr.push(curr);
+        curr = curr.next;
+      }
+
+      return arr;
+    }
+
+    function reverse() {
+      if (!this.head || !this.head.next) {
+        return;
+      }
+
+      var prev = this.head;
+      var curr = this.head.next;
+
+      while (curr) {
+        var t = curr.next;
+        curr.next = prev;
+
+        prev = curr;
+        curr = t;
+      }
+
+      this.tail = this.head;
+      this.tail.next = undefined;
+      this.head = prev;
+    }
+
     const publicAPI = {
       head: undefined,
       tail: undefined,
@@ -136,6 +221,11 @@ const List = {
       insert,
       delete: deleteValue,
       deleteTail,
+      deleteHead,
+      find,
+      fromArray,
+      toArray,
+      reverse,
     };
 
     return publicAPI;
